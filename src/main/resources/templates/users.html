@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+
+    <!-- Your existing stylesheet links -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="/css/users.css" th:href="@{/css/users.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/users.js}"></script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="z-index: 1000;">
+    <a class="navbar-brand" href="#">Library Management System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <form class="form-inline">
+                <input class="form-control mr-sm-4" type="search" placeholder="Filter by ID, Last Name, or Username" aria-label="Search" id="userSearchInput">
+            </form>
+
+            <th:block th:if="${#authorization.expression('isAuthenticated')}">
+                <th:block sec:authorize="hasAnyAuthority('SuperAdmin')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/index">Home</a>
+                            <a class="dropdown-item" th:href="@{/users/new}">New User</a>
+                            <a class="dropdown-item" href="/users/viewAllUsers">All Users</a>
+                            <a class="dropdown-item" href="/orders/viewAllOrders">View Orders</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/books/add">Add Book</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('User')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/index">Home</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+            </th:block>
+        </ul>
+    </div>
+</nav>
+
+
+<section id="container" class="content-container">
+    <header>
+        <h1>User Management</h1>
+    </header>
+    <!-- Error message section -->
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <!-- Success message section -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <th:block th:if="${#authorization.expression('isAuthenticated')}">
+        <th:block sec:authorize="hasAnyAuthority('SuperAdmin')">
+          <table class="table">
+           <thead>
+             <tr>
+              <th>ID</th>
+              <th>Lastname</th>
+              <th>Firstname</th>
+              <th>Username</th>
+              <th>Enabled</th>
+              <th>Role</th>
+              <th>Action</th>
+             </tr>
+            </thead>
+              <tbody>
+              <tr th:each="user : ${allusers}" class="user-row">
+                  <td class="user-id" th:text="${user.id}"></td>
+                  <td class="user-lastname" th:text="${user.lastname}"></td>
+                  <td class="user-firstname" th:text="${user.firstname}"></td>
+                  <td class="user-username" th:text="${user.username}"></td>
+                  <td th:text="${user.enable}"></td>
+                  <td class="user-roleByUserrole" th:text="${user.roleByUserrole.name}"></td>
+                  <td>
+                    <th:block th:if="${user.enable == 0}">
+                       <form th:action="@{'/users/enable'}" method="post" style="display: inline-block; margin-right: 10px;">
+                        <input type="hidden" name="enable" th:value="${user.id}" />
+                        <button type="submit" style="background-color: darkgreen; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Enable</button>
+                       </form>
+                   </th:block>
+
+                   <th:block th:if="${user.enable == 1}">
+                       <form th:action="@{'/users/disable'}" method="post" style="display: inline-block; margin-right: 10px;">
+                          <input type="hidden" name="disable" th:value="${user.id}" />
+                          <button type="submit" style="background-color:black; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Disable</button>
+                       </form>
+                   </th:block>
+
+                  <form th:action="@{'/users/deleteUser'}" method="post" style="display: inline-block; margin-right: 10px;">
+                      <input type="hidden" name="id" th:value="${user.id}" />
+                      <button type="submit" style="background-color: darkred; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Delete User</button>
+                  </form>
+
+                  <a th:href="@{/users/show/{id}(id=${user.id})}" style="display: inline-block; background-color: purple; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">View Details</a>
+
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </th:block>
+    </th:block>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

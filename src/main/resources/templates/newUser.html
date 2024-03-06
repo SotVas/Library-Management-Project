@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="/css/userForm.css" th:href="@{/css/userForm.css}"/>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="z-index: 1000;">
+    <a class="navbar-brand" href="#">Library Management System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+
+            <th:block sec:authorize="isAuthenticated()">
+                <th:block sec:authorize="hasAnyAuthority('SuperAdmin')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/index">Home</a>
+                            <a class="dropdown-item" href="/users/viewAllUsers">All Users</a>
+                            <a class="dropdown-item" href="/orders/viewAllOrders">View Orders</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/books/add">Add Book</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('User')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/index">Home</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+            </th:block>
+        </ul>
+    </div>
+</nav>
+
+<div class="container content-container">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card w-100">
+
+                <div class="card-header">
+                    <h2 class="text-center">Add New User</h2>
+                </div>
+                <div class="card-body">
+                    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                        <p th:text="${errorMessage}"></p>
+                    </div>
+                    <!-- Success message section -->
+                    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                        <p th:text="${successMessage}"></p>
+                    </div>
+                    <form th:action="@{/users/new}" method="post" th:object="${userNewForm}">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" th:field="*{username}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstname">First Name:</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname" th:field="*{firstname}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Last Name:</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname" th:field="*{lastname}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newpassword">New Password:</label>
+                            <input type="password" class="form-control" id="newpassword" name="newpassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create User</button>
+                    </form>
+               </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

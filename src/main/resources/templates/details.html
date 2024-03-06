@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="/css/details.css" th:href="@{/css/details.css}" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/allOrders.js}"></script>
+    <script type="text/javascript" th:src="@{/js/details.js}"></script>
+
+</head>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="#">Library Management System</a>
+    <!-- Sidebar Toggle Box -->
+    <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Menu"></div>
+    </div>
+
+
+
+    <!-- Navbar Content -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <!-- If not authenticated, show the login form -->
+            <th:block th:if="${#authorization.expression('!isAuthenticated')}">
+                <!-- If not authenticated, show the login link -->
+                <li class="nav-item">
+                    <a class="btn btn-success mt-2 btn-lg" href="/login">Login</a>
+                </li>
+            </th:block>
+
+            <!-- If authenticated, show logout and role-based links -->
+            <th:block th:if="${#authorization.expression('isAuthenticated')}">
+
+                <th:block sec:authorize="hasAnyAuthority('SuperAdmin')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg"  href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/index">Home</a>
+                            <a class="dropdown-item" th:href="@{/users/new}">New User</a>
+                            <a class="dropdown-item" href="/users/viewAllUsers">All Users</a>
+                            <a class="dropdown-item" href="/orders/viewAllOrders">View Orders</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/books/add">Add Book</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('User')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/index">Home</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+
+
+            </th:block>
+        </ul>
+    </div>
+
+</nav>
+
+
+<!-- Main Content -->
+<div class="container content-container">
+    <div class="card card-details" id="bookDetailsContainer">
+        <h2>Book Details</h2>
+        <form th:action="@{'/books/' + ${book.id} + '/edit'}" method="post" th:object="${book}">
+            <dl class="row">
+                <dt class="col-sm-3">   ID:</dt>
+                <dd class="col-sm-9" th:text="${book.id}"></dd>
+
+                <dt class="col-sm-3">   Title:</dt>
+                <dd class="col-sm-9">
+                    <span id="titleSpan" th:text="${book.title}"></span>
+                    <input id="titleInput" type="text" class="form-control" th:field="*{title}" style="display: none;" required>
+                </dd>
+
+                <dt class="col-sm-3">   Author:</dt>
+                <dd class="col-sm-9">
+                    <span id="authorSpan" th:text="${book.author}"></span>
+                    <input id="authorInput" type="text" class="form-control" th:field="*{author}" style="display: none;" required>
+                </dd>
+
+                <dt class="col-sm-3">   Genre:</dt>
+                <dd class="col-sm-9">
+                    <span id="genreSpan" th:text="${book.genre}"></span>
+                    <input id="genreInput" type="text" class="form-control" th:field="*{genre}" style="display: none;" required>
+                </dd>
+                <dt class="col-sm-3">   Available:</dt>
+                <dd class="col-sm-9">
+                    <span id="stockSpan" th:text="${book.stock}"></span>
+                    <input id="stockInput" type="text" class="form-control" th:field="*{stock}" style="display: none;" required>
+                </dd>
+            </dl>
+            <div>
+                <a th:if="${#authorization.expression('hasAuthority(''SuperAdmin'')')}" href="javascript:void(0);" class="btn btn-dark-green" role="button" onclick="toggleEdit()">Edit</a>
+            </div>
+
+
+            <div id="editFields" style="display: none;">
+                <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+                <button type="button" class="btn btn-dark-green" onclick="saveChanges()">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

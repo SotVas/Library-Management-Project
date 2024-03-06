@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="" xmlns:text="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" href="/css/style.css" th:href="@{/css/myOrders.css}"/>
+
+  <script type="text/javascript" th:src="@{/js/myOrders.js}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="z-index: 1000;">
+  <a class="navbar-brand" href="#">Library Management System</a>
+  <a href="#" id="overdueOrdersLink" data-toggle="modal" data-target="#notificationModal">
+    <i class="fas fa-bell"></i>
+    <span class="badge badge-pill badge-danger" id="overdueOrdersCount">0</span>
+  </a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+
+      <th:block sec:authorize="isAuthenticated()">
+        <th:block sec:authorize="hasAnyAuthority('SuperAdmin')">
+          <li class="nav-item dropdown">
+
+            <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Menu
+            </a>
+            <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/index">Home</a>
+              <a class="dropdown-item" th:href="@{/users/new}">New User</a>
+              <a class="dropdown-item" href="/users/viewAllUsers">All Users</a>
+              <a class="dropdown-item" href="/orders/viewAllOrders">View Orders</a>
+              <a class="dropdown-item" href="/books">All Books</a>
+              <a class="dropdown-item" href="/books/add">Add Book</a>
+              <a class="dropdown-item" href="/logout">Logout</a>
+            </div>
+          </li>
+        </th:block>
+
+        <th:block sec:authorize="hasAnyAuthority('User')">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Menu
+            </a>
+            <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/index">Home</a>
+              <a class="dropdown-item" href="/books">All Books</a>
+              <a class="dropdown-item" href="/logout">Logout</a>
+            </div>
+          </li>
+        </th:block>
+      </th:block>
+
+    </ul>
+  </div>
+</nav>
+
+<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notificationModalLabel">Notification</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="notificationModalBody">
+
+        <section th:if="${notifications}" class="notification-message">
+          <p th:each="notification : ${notifications}" th:text="${notification}"></p>
+        </section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<section id="container" class="content-container">
+  <header>
+    <h1 class="text-center">My Orders</h1>
+  </header>
+
+  <!-- Success message -->
+  <section th:if="${message}" class="success-message">
+    <p th:text="${message}"></p>
+  </section>
+
+        </div>
+        <div class="card-body">
+          <!-- Display User's Orders -->
+          <div th:each="order : ${userOrders}" th:sort="${order.dateoforder}" th:order="descending">
+            <div class="order-card">
+              <p><strong th:text="'Order ID: '"></strong><span th:text="${order.id}"></span></p>
+              <p><strong th:text="'Book Title: '"></strong><span th:text="${order.bookByBookId.title}"></span></p>
+              <p><strong th:text="'Date of Order: '"></strong><span th:text="${#dates.format(order.dateoforder, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+              <p th:if="${order.status == 2}">
+                <strong th:text="'Date of Expected Return: '"></strong>
+                <span th:text="${#dates.format(order.dateOfReturn, 'yyyy-MM-dd ')}"></span>
+              </p>
+              <p class="due-message" th:if="${order.due}">
+                OVERDUE
+              </p>
+
+              <p><strong>Status:</strong>
+                <span th:switch="${order.status}">
+                  <span th:case="'0'">Pending Confirmation</span>
+                  <span th:case="'2'">Accepted</span>
+                  <span th:case="'1'">Denied</span>
+                  <span th:case="*" th:utext="'Unknown Status'"></span>
+                </span>
+              </p>
+
+
+
+              <form th:action="@{/orders/deleteOrder}" method="post" style="display: inline;" th:if="${order.status eq 0}">
+                <input type="hidden" name="orderId" th:value="${order.id}">
+                <button type="submit" class="btn btn-danger">Cancel Order</button>
+              </form>
+              <form th:action="@{/orders/deleteOrder}" method="post" style="display: inline;" th:if="${order.status eq 1}">
+                <input type="hidden" name="orderId" th:value="${order.id}">
+                <button type="submit" class="btn btn-danger">Delete Order</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+</section>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>

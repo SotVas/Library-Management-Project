@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" th:src="@{/js/editUser.js}"></script>
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="/css/editUser.css" th:href="@{/css/editUser.css}"/>
+</head>
+
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="#">Library Management System</a>
+    <!-- Sidebar Toggle Box -->
+    <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Menu"></div>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+        <!-- If authenticated, show logout and role-based links -->
+        <th:block th:if="${#authorization.expression('isAuthenticated')}">
+
+            <th:block sec:authorize="hasAnyAuthority('SuperAdmin')">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg"  href="#" id="navbarDropdownMenuLink" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Menu
+                    </a>
+                    <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/index">Home</a>
+                        <a class="dropdown-item" th:href="@{/users/new}">New User</a>
+                        <a class="dropdown-item" href="/users/viewAllUsers">All Users</a>
+                        <a class="dropdown-item" href="/orders/viewAllOrders">View Orders</a>
+                        <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                        <a class="dropdown-item" href="/books">All Books</a>
+                        <a class="dropdown-item" href="/books/add">Add Book</a>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    </div>
+                </li>
+            </th:block>
+
+            <th:block sec:authorize="hasAnyAuthority('User')">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Menu
+                    </a>
+                    <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/index">Home</a>
+                        <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                        <a class="dropdown-item" href="/books">All Books</a>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    </div>
+                </li>
+            </th:block>
+
+
+        </th:block>
+    </ul>
+</div>
+
+</nav>
+
+<div class="container content-container">
+    <div class="card card-details">
+        <h2>Edit User</h2>
+        <form th:action="@{'/users/edit/' + ${userToEdit.id}}" method="post" th:object="${userToEdit}">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" th:field="*{username}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="firstname">First Name:</label>
+                <input type="text" class="form-control" id="firstname" th:field="*{firstname}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lastname">Last Name:</label>
+                <input type="text" class="form-control" id="lastname" th:field="*{lastname}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select class="form-control" id="role" name="roleByUserrole.id">
+                    <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}" th:selected="${role.id eq userToEdit.roleByUserrole.id}"></option>
+                </select>
+            </div>
+            <!-- Display error message -->
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <p th:text="${errorMessage}"></p>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <a class="btn btn-primary btn-dark-green text-white" th:href="@{'/users/changePassword/' + ${userToEdit.id}}">Change Password</a>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary btn-dark-green">Save Changes</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

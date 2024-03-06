@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="/css/userDetails.css" th:href="@{/css/userDetails.css}" />
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="#">Library Management System</a>
+    <!-- Sidebar Toggle Box -->
+    <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Menu"></div>
+    </div>
+
+
+
+    <!-- Navbar Content -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <!-- If not authenticated, show the login form -->
+            <th:block th:if="${#authorization.expression('!isAuthenticated')}">
+                <!-- If not authenticated, show the login link -->
+                <li class="nav-item">
+                    <a class="btn btn-success mt-2 btn-lg" href="/login">Login</a>
+                </li>
+            </th:block>
+
+            <!-- If authenticated, show logout and role-based links -->
+            <th:block th:if="${#authorization.expression('isAuthenticated')}">
+
+                <th:block sec:authorize="hasAnyAuthority('SuperAdmin')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg"  href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/index">Home</a>
+                            <a class="dropdown-item" th:href="@{/users/new}">New User</a>
+                            <a class="dropdown-item" href="/users/viewAllUsers">All Users</a>
+                            <a class="dropdown-item" href="/orders/viewAllOrders">View Orders</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/books/add">Add Book</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('User')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/index">Home</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+
+
+            </th:block>
+        </ul>
+    </div>
+
+</nav>
+
+<div class="container content-container">
+    <div class="card-details">
+
+        <h2>User Details</h2>
+        <form th:action="@{'/users/show/' + ${userToShow.id}}" method="get" >
+            <dl class="row">
+                <dt class="col-sm-3">ID:</dt>
+                <dd class="col-sm-9" th:text="${userToShow.id}"></dd>
+
+                <dt class="col-sm-3">Last Name:</dt>
+                <dd class="col-sm-9" th:text="${userToShow.lastname}"></dd>
+
+                <dt class="col-sm-3">First Name:</dt>
+                <dd class="col-sm-9" th:text="${userToShow.firstname}"></dd>
+
+                <dt class="col-sm-3">Username:</dt>
+                <dd class="col-sm-9" th:text="${userToShow.username}"></dd>
+
+                <dt class="col-sm-3">Role:</dt>
+                <dd class="col-sm-9" th:text="${userToShow.getRoleByUserrole().name}"></dd>
+
+                <dt class="col-sm-3">Status:</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${userToShow.enable == 1}">Enabled</span>
+                    <span th:if="${userToShow.enable == 0}">Disabled</span>
+                </dd>
+
+            </dl>
+            <!-- user edit button -->
+            <!-- user edit button - visible only to users with 'User' authority -->
+            <a class="btn btn-primary btn-dark-green mt-2 btn-lg" th:href="@{'/users/edit/' + ${userToShow.id}}" sec:authorize="hasAuthority('SuperAdmin')">Edit User</a>
+
+
+            <a class="btn btn-primary btn-dark-red mt-2 btn-lg" href="/users/viewAllUsers" sec:authorize="hasAuthority('SuperAdmin')">Back to User List</a>
+
+            <!-- change password button - visible only to users with 'User' authority -->
+            <a class="btn btn-primary btn-dark-blue mt-2 btn-lg" th:href="@{'/users/changePassword/' + ${userToShow.id}}" sec:authorize="hasAuthority('User')">Change Password</a>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <p th:text="${errorMessage}"></p>
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                <p th:text="${successMessage}"></p>
+            </div>
+            <a class="btn btn-primary btn-dark-green mt-2 btn-lg" th:href="@{'/export/user/' + ${userToShow.id}}" target="_blank">Export as PDF</a>
+
+        </form>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

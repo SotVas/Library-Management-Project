@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    background-repeat: repeat;
+}
+
+.content-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 70px auto; /* Center container on the screen */
+    z-index: 1;
+    min-height: calc(100vh - 140px); /* Set the minimum height to the viewport height minus twice the margin value (70px top + 70px bottom) */
+    overflow-y: auto; /* Enable vertical scrolling when content is taller than the viewport */
+    max-width: 800px; /* Set the maximum width */
+    position: relative; /* Add relative positioning for absolute positioning of DUE message */
+}
+
+nav {
+    z-index: 1000;
+    border-bottom: none; /* Remove the border */
+}
+
+h1 {
+    margin: 0; /* Remove default margin */
+}
+
+.success-message {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.order-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: white;
+    position: relative; /* Add relative positioning for absolute positioning of DUE message */
+}
+.notification-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+}
+
+.due-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: red;
+    font-weight: bold;
+}
+
+form {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+button {
+    background-color: #4caf50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+.return-button {
+    background-color: darkgreen;
+    color: white;
+    position: fixed;
+    top: 56px; /* Adjust based on your navbar height */
+    left: 0;
+    margin: 10px;
+    z-index: 1001;
+}
+
+/* Style for the header */
+header {
+    background-color: darkgreen;
+    color: white;
+    padding: 20px; /* Adjust padding as needed */
+    border-radius: 10px 10px 0 0; /* Add rounded corners to the top */
+}
+

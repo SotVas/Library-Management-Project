@@ -1,0 +1,54 @@
+body {
+    padding-top: 56px; /* Adjust based on your navbar height */
+    background-color: rgb(235, 241, 235);
+
+}
+
+.content-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 170px; /* Use margin-top instead of top */
+    z-index: 1;
+    min-height: 500px;
+    overflow-y: auto;
+}
+
+.card {
+    margin-top: 20px; /* Adjust margin for the card within the container */
+    height: auto; /* Set initial height to auto */
+
+}
+
+/* Add z-index to navbar */
+nav {
+    z-index: 1000;
+}
+
+/* Style for the return button */
+.return-button {
+    background-color: darkgreen;
+    color: white;
+    position: fixed;
+    top: 56px; /* Adjust based on your navbar height */
+    left: 10px;
+    margin: 10px;
+    z-index: 1001;
+}
+
+/* Style for the card header */
+.card-header {
+    background-color: darkgreen;
+    color: white;
+}
+
+/* Style for the form label */
+.label-dark-green {
+    color: darkgreen;
+}
+
+/* Style for the form submit button */
+.btn-dark-green {
+    background-color: darkgreen;
+    color: white;
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}"/>
+
+    <script type="text/javascript" th:src="@{/js/index.js}"></script>
+
+
+</head>
+
+<body>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="#">Library Management System</a>
+    <!-- Sidebar Toggle Box -->
+    <div class="sidebar-toggle-box" >
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Menu" ></div>
+    </div>
+
+
+
+    <!-- Navbar Content -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <!-- If not authenticated, show the login form -->
+            <th:block th:if="${#authorization.expression('!isAuthenticated')}">
+                <!-- If not authenticated, show the login link -->
+                <li class="nav-item">
+                    <a class="btn btn-success mt-2 btn-lg" href="/login">Login</a>
+                </li>
+            </th:block>
+
+            <!-- If authenticated, show logout and role-based links -->
+            <th:block th:if="${#authorization.expression('isAuthenticated')}">
+
+                <th:block sec:authorize="hasAnyAuthority('SuperAdmin')">
+                    <li class="nav-item dropdown" >
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg"  href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink" style="margin-left: -51px;">
+                            <a class="dropdown-item" th:href="@{/users/show/{id}(id=${loggedInUserEntity.id})}">My Profile</a>
+                            <a class="dropdown-item" href="/users/viewAllUsers">Users</a>
+                            <a class="dropdown-item" th:href="@{/users/new}">Create New User</a>
+                            <a class="dropdown-item" href="/orders/viewAllOrders">View Orders</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/books/add">Add Book</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('User')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink" style="margin-left: -51px;">
+                            <a class="dropdown-item" th:href="@{/users/show/{id}(id=${loggedInUserEntity.id})}">My Profile</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+
+
+            </th:block>
+        </ul>
+    </div>
+
+</nav>
+
+<!-- Centered Box Container -->
+<div class="center-box mt-5">
+    <div class="container mt-4 text-center text-white">
+        <h2 th:if="${#authorization.expression('isAuthenticated()')}">
+            Welcome to the Library System,<span th:text="${#authentication.getPrincipal().getUsername()}"></span>!
+        </h2>
+        <h2 th:unless="${#authorization.expression('isAuthenticated')}">
+            Welcome to the Library System
+        </h2>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

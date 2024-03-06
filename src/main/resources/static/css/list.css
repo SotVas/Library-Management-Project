@@ -1,0 +1,54 @@
+#bookSearchInput {
+    margin-right: 10px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    background-repeat: repeat;
+}
+
+.content-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    top: 70px; /* Adjust based on your navbar height */
+    z-index: 1;
+    min-height: calc(100vh - 70px); /* Set the minimum height to the viewport height minus navbar height */
+    overflow-y: auto; /* Enable vertical scrolling when content is taller than the viewport */
+}
+
+nav {
+    z-index: 1000;
+}
+
+.navbar-nav {
+    margin-left: auto;
+}
+
+.form-inline {
+    margin-right: 5px; /* Add margin to the right of the form */
+}
+
+.form-inline button {
+    margin-right: 20px;
+}
+
+.return-button {
+    background-color: darkgreen;
+    color: white;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    margin: 10px;
+    z-index: 1001;
+}
+h2{
+    background-color: darkgreen;
+    color: white;
+    padding: 10px; /* Adjust padding as needed */
+    margin-bottom: 20px; /* Adjust margin as needed */
+}

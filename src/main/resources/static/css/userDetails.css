@@ -1,0 +1,78 @@
+body {
+    padding-top: 56px; /* Adjust based on your navbar height */
+    background-color: rgb(235, 241, 235);
+    background-repeat: repeat;
+}
+
+.content-container {
+    background-color: rgba(255, 255, 255, 0);
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    top: 70px; /* Adjust based on your navbar height */
+    z-index: 1;
+    min-height: 60vh; /* Set the minimum height to the viewport height minus navbar height */
+    overflow-y: auto; /* Enable vertical scrolling when content is taller than the viewport */
+}
+
+/* Add z-index to navbar */
+nav {
+    z-index: 1000;
+}
+
+/* Style for the return button */
+.return-button {
+    background-color: darkgreen;
+    color: white;
+    position: fixed;
+    top: 56px; /* Adjust based on your navbar height */
+    left: 0;
+    margin: 10px;
+    z-index: 1001;
+}
+
+/* Style for the card */
+.card-details {
+    background-color: #f8f9fa; /* Use a light background color */
+    margin-top: 20px; /* Adjust margin for the card within the container */
+    border: 1px solid #ced4da; /* Add a border for a cleaner look */
+    border-radius: 10px;
+    padding: 5px;
+    min-height: 55vh;
+    overflow: hidden; /* Add overflow property to prevent content from overflowing */
+}
+.card {
+    margin-top: 20px; /* Adjust margin for the card within the container */
+    min-height: 400px;
+}
+
+/* Style for the edit button */
+.btn-edit {
+    background-color: darkgreen;
+    color: white;
+}
+.btn-dark-red{
+    background-color: darkred;
+    color: white;
+}
+.btn-dark-green {
+    background-color: darkgreen;
+    color: white;
+}
+.col-sm-3 {
+    font-size: 20px; /* Adjust the font size as needed */
+
+}
+.col-sm-9{
+    font-size: 18px;
+
+}
+.form-control {
+    font-size: 20px; /* Adjust the font size as needed */
+}
+h2{
+    background-color: darkgreen;
+    color: white;
+    padding: 10px; /* Adjust padding as needed */
+    margin-bottom: 20px; /* Adjust margin as needed */
+}

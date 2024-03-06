@@ -1,0 +1,28 @@
+/* style-add.css */
+
+body {
+    background-image: url('/img/library-book-bookshelf-read.jpg'); /* Replace with the path to your background image */
+    background-size: cover;
+    background-position: center;
+    color: white; /* Set text color to white or any color that suits your background */
+}
+.label-dark-green {
+    color: darkgreen;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Adjust based on your requirements */
+}
+
+.container form {
+    width: 80%; /* Adjust the width of the form as needed */
+    max-width: 400px; /* Set a max-width for better readability on larger screens */
+}
+.label-dark-green {
+    color: darkgreen;
+}
+
+/* Add any additional styling for form elements as needed */

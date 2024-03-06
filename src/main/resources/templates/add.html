@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Book</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="/css/add.css" th:href="@{/css/add.css}"/>
+
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="z-index: 1000;">
+    <a class="navbar-brand" href="#">Library Management System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <th:block th:if="${#authorization.expression('isAuthenticated')}">
+                <th:block sec:authorize="hasAnyAuthority('SuperAdmin')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/index">Home</a>
+                            <a class="dropdown-item" th:href="@{/users/new}">New User</a>
+                            <a class="dropdown-item" href="/users/viewAllUsers">All Users</a>
+                            <a class="dropdown-item" href="/orders/viewAllOrders">View Orders</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/books/add">Add Book</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('User')">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white custom-green-button btn-lg" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu bg-large dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/index">Home</a>
+                            <a class="dropdown-item" href="/orders/myOrders">My Orders</a>
+                            <a class="dropdown-item" href="/books">All Books</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </th:block>
+            </th:block>
+        </ul>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container content-container">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card w-100">
+
+                <div class="card-header">
+                    <h2 class="text-center">Add New Book</h2>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/books/add}" method="post">
+                        <div class="form-group">
+                            <label for="title" class="label-dark-green">Title</label>
+                            <input type="text" class="form-control mx-auto" id="title" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="author" class="label-dark-green">Author</label>
+                            <input type="text" class="form-control mx-auto" id="author" name="author" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="genre" class="label-dark-green">Genre</label>
+                            <input type="text" class="form-control mx-auto" id="genre" name="genre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stock" class="label-dark-green">Stock</label>
+                            <input type="text" class="form-control mx-auto" id="stock" name="stock" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block btn-dark-green">Save Book</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

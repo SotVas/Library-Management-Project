@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Login Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/login.css}"/>
+    <script type="text/javascript" th:src="@{/js/login.js}"></script>
+
+</head>
+
+<body>
+
+<div id="loginbox" class="col-md-2 mx-auto mainbox absolute-center">
+    <div class="panel panel-info">
+        <div class="overlay"></div>
+        <div class="panel-heading">
+            <div class="panel-title">Login</div>
+        </div>
+        <div class="panel-body hidden-inputs">
+            <!-- Login Form -->
+            <form th:action="@{/login}" method="post" id="formLogin" class="form-horizontal">
+                <!-- Place for messages: error, alert, etc. -->
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div th:if="${param.error}" class="alert alert-danger">
+                            Invalid username and password.
+
+                        </div>
+
+
+                        <div th:if="${param.logout}" class="alert alert-success">
+                            You have been logged out.
+                            <script th:inline="javascript">
+                                window.location.href = '/login';
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input type="text" name="username" placeholder="Username" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input type="password" name="password" placeholder="Password" class="form-control">
+                            <!-- Show Password Eye Button -->
+                            <span class="input-group-addon show-password-toggle">
+                                <i id="showPassword" class="fa fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group text-center">
+                    <div class="col-xs-12">
+                        <button type="submit" class="btn btn-success">Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
